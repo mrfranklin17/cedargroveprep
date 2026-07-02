@@ -1,6 +1,6 @@
 // Cedar Grove Board Prep — service worker
 // Network-first (always fetch the latest when online), fall back to cache when offline.
-const CACHE = "cg-prep-v2";
+const CACHE = "cg-prep-v3";
 const CORE = [
   "./",
   "./index.html",
