@@ -160,6 +160,50 @@
   .installnote { font-size: .82rem; color: var(--ink-soft); background: var(--sky-tint); border: 1px solid var(--sky-line); border-radius: 10px; padding: 12px 14px; margin-top: 12px; }
   .installnote b { color: var(--forest); }
 
+  /* ---------- Quiz ---------- */
+  .roleopt.qz-disabled { opacity: .5; }
+  .chiprow { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px; }
+  .chiprow button { border: 1px solid var(--line); background: var(--card); color: var(--ink-soft); font-size: .82rem; padding: 8px 14px; border-radius: 20px; cursor: pointer; }
+  .chiprow button.on { background: var(--forest); border-color: var(--forest); color: #EFF4EA; }
+  .qz-best { font-size: .82rem; color: var(--ink-soft); background: var(--sky-tint); border: 1px solid var(--sky-line); border-radius: 10px; padding: 10px 14px; margin-top: 14px; }
+  .qz-best b { color: var(--forest); }
+
+  .qz-progwrap { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .qz-progtext { font-family: var(--mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); flex: none; }
+  .qz-track { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; flex: 1; }
+  .qz-track i { display: block; height: 100%; background: var(--green); transition: width .3s ease; }
+  .qz-streak { display: flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: .66rem; font-weight: 700; color: var(--green-d); flex: none; white-space: nowrap; }
+  .qz-streak svg { width: 14px; height: 14px; }
+
+  .qz-code { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sage-d); margin-bottom: 8px; }
+  .qz-stem { font-family: var(--serif); font-size: 1.22rem; font-weight: 600; color: var(--forest); line-height: 1.32; margin-bottom: 20px; }
+  .qz-choices { display: flex; flex-direction: column; gap: 10px; }
+  .qz-choice { text-align: left; padding: 14px 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); font-size: .96rem; color: var(--ink); cursor: pointer; }
+  .qz-choice:active { background: var(--paper); }
+  .qz-choice.correct { border-color: var(--green); background: #E7F1EA; color: var(--green-d); font-weight: 600; }
+  .qz-choice.wrong { border-color: #C0503F; background: #FBEAE6; color: #B44430; font-weight: 600; }
+  .qz-choice[disabled] { cursor: default; }
+
+  .qz-feedback { margin-top: 16px; padding: 14px 15px; border-radius: 12px; font-size: .92rem; animation: fade .24s ease; }
+  .qz-feedback.ok { background: #E7F1EA; border: 1px solid var(--green); }
+  .qz-feedback.no { background: var(--sky-tint); border: 1px solid var(--sky-line); border-left: 3px solid var(--green); }
+  .qz-feedback b { display: block; font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; color: var(--green-d); }
+  .qz-cite { font-family: var(--mono); font-size: .62rem; color: var(--ink-soft); margin-top: 12px; }
+
+  .qz-resultwrap { position: relative; }
+  .qz-badge { display: inline-block; font-family: var(--mono); font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 20px; background: var(--green); color: #fff; margin: 4px 6px 0 0; }
+  .qz-lead2 { font-family: var(--mono); font-size: .6rem; letter-spacing: .13em; text-transform: uppercase; color: var(--sage-d); margin: 18px 0 10px; }
+  .qz-missrow { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; margin-bottom: 10px; }
+  .qz-missq { font-family: var(--serif); font-size: .98rem; font-weight: 600; color: var(--forest); margin-bottom: 6px; }
+  .qz-missa { font-size: .88rem; color: var(--ink-soft); }
+  .qz-missa b { color: var(--green-d); }
+
+  .qz-confetti { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+  .qz-confetti span { position: absolute; top: 0; left: calc(10% + (var(--i) * 9%)); width: 7px; height: 7px; border-radius: 2px; background: var(--green); animation: confetti-fall 1.1s ease-out forwards; animation-delay: calc(var(--i) * 0.05s); }
+  .qz-confetti span:nth-child(3n) { background: var(--sage); }
+  .qz-confetti span:nth-child(3n+1) { background: var(--sky-line); }
+  @keyframes confetti-fall { from { transform: translateY(-10px) rotate(0deg); opacity: 1; } to { transform: translateY(70px) rotate(200deg); opacity: 0; } }
+
   :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   @media (min-width: 760px) { .screen-inner { max-width: 680px; } }
@@ -209,122 +253,157 @@ const DOMAINS = {
 const Q = [
   { d:"MISSION", core:true, owners:["all"], q:"In one minute, what is Cedar Grove and who is it for?",
     points:["A 6–12 public charter opening Fall 2027 in Spokane, serving students historically shut out of college pathways — first-generation, and students navigating income, race, language, or disability barriers.","Mission: a joyful community where every student is <b>known, challenged, and empowered</b>, prepared for college and lives of purpose through rigorous, active learning.","The grove metaphor is the thesis: deep roots (knowledge, identity, relationships, purpose) plus shared growth — students grow the way forests do, in relationship, not isolation."],
-    cite:"Prompt 2.1 Mission, Vision, Purpose" },
+    cite:"Prompt 2.1 Mission, Vision, Purpose",
+    quiz:{ q:"What grade span does Cedar Grove serve?", choices:["6\u201312", "K\u20135", "9\u201312"], answer:"6\u201312", explain:"Cedar Grove is a 6\u201312 charter \u2014 middle and high school under one roof, opening Fall 2027 in Spokane." } },
   { d:"MISSION", core:true, owners:["all"], q:"What are the ROOTS values, and where do they actually show up?",
     points:["Rooted in Identity · Open Bold Futures · Own Your Path · Think Deeply · Strengthen Community.","They aren't a poster — they function as daily behavioral expectations. 'Strengthen Community' is the operational core of the discipline and safety approach: students are responsible for the environment, not just their own conduct."],
-    cite:"Prompt 2.2 Key Design Elements; Safe Environment section" },
+    cite:"Prompt 2.2 Key Design Elements; Safe Environment section",
+    quiz:{ q:"Which ROOTS value is the operational core of the discipline and safety approach?", choices:["Strengthen Community", "Think Deeply", "Own Your Path"], answer:"Strengthen Community", explain:"Strengthen Community makes students responsible for the shared environment, not just their own conduct \u2014 it's not a poster value, it's the discipline model." } },
 
   { d:"MODEL", core:true, owners:["pettey","dunn"], q:"Walk us through your instructional model. What are the design pillars?",
     points:["Four pillars: (1) Rigorous, Active Learning; (2) Belonging, Joy & Agency; (3) Navigate & Launch — college/career readiness; (4) Every Student Is Known — purpose and 'the Branch.'","Rigor is defined as the <b>quality of thinking</b>, not volume of work. College-prep by default, no remedial tracks — differentiated support, not lowered expectations.","Grounded in research: Bjork (desirable difficulties), Darling-Hammond (whole-child), Conley (Four Keys)."],
-    cite:"Prompt 2.2 Key Design Elements" },
+    cite:"Prompt 2.2 Key Design Elements",
+    quiz:{ q:"How many design pillars structure the instructional model?", choices:["Three", "Four", "Five"], answer:"Four", explain:"Four pillars: Rigorous Active Learning, Belonging/Joy/Agency, Navigate & Launch, and Every Student Is Known." } },
   { d:"MODEL", owners:["pettey","dunn"], q:"What is a 'Canopy Conversation' and how is it more than a buzzword?",
     points:["A structured Socratic seminar built into <b>every subject, grades 6–12</b>, sequenced from guided participation in MS to fully student-led discourse by 12th grade.","It's a practiced skill built over seven years, not an aspiration. Validated by a site visit to Washington Latin, where a team member joined a Socratic <i>math</i> seminar.","Ties to research on discussion-based learning and adolescent identity (Harter)."],
-    cite:"Prompt 2.2 — The Canopy Conversation" },
+    cite:"Prompt 2.2 — The Canopy Conversation",
+    quiz:{ q:"A Canopy Conversation is:", choices:["A structured Socratic seminar in every subject, grades 6\u201312", "A once-a-year all-school assembly", "An optional after-school debate club"], answer:"A structured Socratic seminar in every subject, grades 6\u201312", explain:"It's a practiced skill built over seven years \u2014 guided participation in middle school, fully student-led discourse by 12th grade \u2014 validated by a site visit to Washington Latin." } },
   { d:"MODEL", owners:["pettey"], q:"Describe the Grove Journey and June Term. Is June Term instructional time or enrichment?",
     points:["Seven-year arc; each grade has a theme, an outdoor environment, and a community partner, moving from local experiences in 6th toward internships and independent launch by 12th.","June Term is 2–3 weeks at the end of each year — internships, expeditions, financial literacy, college navigation. It's applied core learning, not enrichment: 'the internship is a job.'","Culminates in a capstone narrative defended before a panel including a community/professional member."],
-    cite:"Prompt 2.2 — Grove Journey / June Term; Design Pillar 4" },
+    cite:"Prompt 2.2 — Grove Journey / June Term; Design Pillar 4",
+    quiz:{ q:"June Term is best described as:", choices:["2\u20133 weeks of applied core learning \u2014 internships, expeditions, financial literacy", "An optional summer enrichment camp, not core learning", "A single field trip at year's end"], answer:"2\u20133 weeks of applied core learning \u2014 internships, expeditions, financial literacy", explain:"\"The internship is a job\" \u2014 June Term is applied core learning, not enrichment, and culminates in a capstone defended before a panel." } },
   { d:"MODEL", owners:["dunn","pettey"], q:"What curriculum are you using, and how will you guarantee alignment to Washington standards?",
     points:["College-prep sequence with AP access for all and College in the High School; a curriculum crosswalk mapping every unit to WA EALRs/GLEs is committed by <b>December 2026</b>.","Annual principal-led curriculum audit against OSPI guidance; Mike Dunn (WSU, 15-yr ESD 101 superintendent) is the standing standards-alignment resource.","External verification via SBAC, PSAT/SAT, and interim assessments; full engagement with WISF."],
-    cite:"Prompt 2.2 — Curriculum Alignment" },
+    cite:"Prompt 2.2 — Curriculum Alignment",
+    quiz:{ q:"By when is the curriculum crosswalk to WA EALRs/GLEs committed?", choices:["December 2026", "June 2027", "December 2025"], answer:"December 2026", explain:"The crosswalk mapping every unit to WA standards is committed by December 2026, backed by an annual principal-led curriculum audit." } },
   { d:"MODEL", owners:["pettey"], q:"You lean heavily on AI literacy. What does that mean concretely for a 6–12 school?",
     points:["AI literacy is taught as an explicit competency alongside note-taking and self-advocacy: students use AI as a thinking partner, evaluate its output, and understand its ethical limits.","Framed as future-readiness — the judgment employers and colleges will expect from day one."],
-    cite:"Prompt 2.2 — AI Literacy and Future-Ready Skills" },
+    cite:"Prompt 2.2 — AI Literacy and Future-Ready Skills",
+    quiz:{ q:"How is AI literacy taught at Cedar Grove?", choices:["As an explicit competency, like note-taking or self-advocacy", "As a stand-alone elective, high school only", "It isn't part of the curriculum"], answer:"As an explicit competency, like note-taking or self-advocacy", explain:"Students use AI as a thinking partner, evaluate its output, and learn its ethical limits \u2014 framed as future-readiness employers and colleges will expect." } },
 
   { d:"OUTCOMES", core:true, owners:["pettey","wright"], q:"What are your Year-5 outcome goals, and how will the commission know if you're succeeding?",
     points:["Five goal areas mirroring the mission. Headline Yr-5 targets: SBAC meet/exceed state avg with closing subgroup gaps; 80% meet SAT/ACT benchmarks; 90%+ retention; 95% complete ≥1 capstone/internship; 100% accepted to ≥1 two/four-year institution; grad rate ≥ state (~85%); 80%+ enroll postsecondary within a year; 70%+ persist to year two.","<b>Every target disaggregated</b> by race, income, IEP/504, and EL — the school is 'not successful if any subgroup is systematically excluded.'"],
-    cite:"Prompt 2.3 Outcomes — goal table" },
+    cite:"Prompt 2.3 Outcomes — goal table",
+    quiz:{ q:"What's the Year-5 target for students meeting SAT/ACT benchmarks?", choices:["80%", "60%", "95%"], answer:"80%", explain:"80%+ meeting SAT/ACT benchmarks by Year 5 \u2014 and every target is disaggregated by race, income, IEP/504, and EL status." } },
   { d:"OUTCOMES", owners:["wright","pettey"], q:"How do you measure 'belonging' without hand-waving? It's easy to claim, hard to prove.",
     points:["Belonging is operationalized as measurable systems, not aspirational language — 90%+ annual retention with exit interviews for every departing student, plus bi-annual climate surveys reported publicly with action plans within 30 days.","Dr. Wright's role is specifically to ensure 'belonging, joy, and agency' is tracked through measurable systems and ongoing evaluation."],
-    cite:"Prompt 2.3; Dr. Wright bio" },
+    cite:"Prompt 2.3; Dr. Wright bio",
+    quiz:{ q:"How is 'belonging' measured, concretely?", choices:["90%+ retention with exit interviews, plus public bi-annual climate surveys", "A single end-of-year satisfaction survey", "It isn't formally measured"], answer:"90%+ retention with exit interviews, plus public bi-annual climate surveys", explain:"Belonging is tracked as a measurable system \u2014 climate survey results are reported publicly with action plans within 30 days." } },
   { d:"OUTCOMES", owners:["wiegner","pettey"], q:"When the school misses a target, what actually happens at the board level?",
     points:["CEO reports on a defined cycle: monthly academic dashboard, bi-annual climate results, annual performance report.","Board receives a formal annual report tied to the charter performance framework, disaggregated, with year-over-year trends from Year 2; the Academic Achievement Committee reviews meeting/approaching/falling-short status and the board holds the CEO to action plans when targets are missed.","Local precedent: Lumen's mission-specific Academic Performance Framework negotiated with SPS, renewed with no conditions."],
-    cite:"Prompt 2.3 — Board Accountability" },
+    cite:"Prompt 2.3 — Board Accountability",
+    quiz:{ q:"Which board committee reviews meeting/approaching/falling-short status on outcomes?", choices:["Academic Achievement Committee", "Finance Committee", "Governance Committee"], answer:"Academic Achievement Committee", explain:"The Academic Achievement Committee reviews outcome status and the board holds the CEO to action plans when targets are missed." } },
 
   { d:"STUDENTS", owners:["dunn","pettey"], q:"What percent of students do you project as SWD and multilingual, and how are you staffed to serve them?",
     points:["At full enrollment: ~14% students with disabilities, ~13% multilingual learners — intentionally above the SPS ML baseline (~7–8%) because of targeted outreach.","'Inclusion by design': MTSS + co-teaching/push-in in gen-ed, UDL from the outset, LRE default placement in the general classroom.","SpEd related services (psych, speech, OT/PT) contracted through ESD 101, scaling with enrollment; in-house specialists added as the school grows."],
-    cite:"Prompt 2.2 — Serving Students with Disabilities and ML" },
+    cite:"Prompt 2.2 — Serving Students with Disabilities and ML",
+    quiz:{ q:"At full enrollment, what share of students are projected to be multilingual learners?", choices:["~13%", "~7\u20138%", "~25%"], answer:"~13%", explain:"~13% ML is intentionally above the SPS baseline (~7\u20138%) because of targeted outreach \u2014 paired with ~14% students with disabilities." } },
   { d:"STUDENTS", owners:["dunn"], q:"If SWD enrollment comes in higher than projected in Year 1, what's your plan?",
     points:["Increase ESD 101 contracted services, adjust co-teaching ratios, and direct additional SpEd funding to expanded capacity.","If lower than projected, the inclusive structures (UDL, MTSS) stay — they benefit all learners regardless of subgroup size."],
-    cite:"Prompt 2.2 — Evaluation of Effectiveness and Adaptation" },
+    cite:"Prompt 2.2 — Evaluation of Effectiveness and Adaptation",
+    quiz:{ q:"If SWD enrollment comes in higher than projected in Year 1, what happens?", choices:["Increase ESD 101 contracted services and adjust co-teaching ratios", "Cap enrollment for students with disabilities", "Refer those students to other district schools"], answer:"Increase ESD 101 contracted services and adjust co-teaching ratios", explain:"Additional SpEd funding follows the need; if enrollment is lower than projected, the inclusive structures (UDL, MTSS) stay in place regardless." } },
   { d:"STUDENTS", owners:["pettey","wright"], q:"'College-prep by default, no tracking' sounds good — but how does a struggling 6th grader actually access rigor?",
     points:["Support is layered onto the same rigorous curriculum, never a separate lower track: embedded intervention blocks in the master schedule (a structural commitment, not an afterthought), co-teaching, and UDL.","Modeled on the Uncommon Schools site visit — intervention as design, not a sign of failure. 'What differs across learners is not the expectation but the level of support.'"],
-    cite:"Prompt 2.2 — Design Pillar 1; Uncommon site visit" },
+    cite:"Prompt 2.2 — Design Pillar 1; Uncommon site visit",
+    quiz:{ q:"How does a struggling 6th grader access rigor?", choices:["Support is layered onto the same curriculum via embedded intervention blocks", "They're placed in a separate remedial track", "They repeat the grade"], answer:"Support is layered onto the same curriculum via embedded intervention blocks", explain:"\"What differs across learners is not the expectation but the level of support\" \u2014 modeled on the Uncommon Schools site visit." } },
 
   { d:"GOV", core:true, owners:["wiegner"], q:"Describe the division of authority between the board and the CEO.",
     points:["The board governs; the CEO and staff manage. Board approves/monitors the strategic plan and budget, hires/evaluates/replaces the CEO, adopts policy, monitors outcomes against authorizer goals, and safeguards financial sustainability.","The CEO executes the academic program and operations, and hires/supervises/terminates all staff. The CEO is a <b>non-voting</b> participant at board meetings."],
-    cite:"Prompt 3.1 — Board of Directors; Division of Responsibilities" },
+    cite:"Prompt 3.1 — Board of Directors; Division of Responsibilities",
+    quiz:{ q:"Is the CEO a voting member of the board?", choices:["No \u2014 non-voting", "Yes, full voting rights", "Only on academic matters"], answer:"No \u2014 non-voting", explain:"The board governs and the CEO manages: the CEO executes the program and hires/supervises staff, but sits as a non-voting participant." } },
   { d:"GOV", owners:["wiegner"], q:"What's your board composition, term structure, and committee model?",
     points:["7–11 members recruited via a skills-and-values matrix (education, finance, legal, HR, philanthropy, facilities, equity, community), with staggered 3-year terms and intentional representation from first-gen graduates and communities of color.","Officers: Chair (Wiegner), Vice Chair, Secretary (Wright), Treasurer (Franklin). Four standing committees: Governance, Academic Achievement, Finance, Development (which drives 100% board giving)."],
-    cite:"Prompt 3.1 — Composition and Officers; Board Committees" },
+    cite:"Prompt 3.1 — Composition and Officers; Board Committees",
+    quiz:{ q:"How many members is the board designed to have?", choices:["7\u201311", "3\u20135", "15\u201320"], answer:"7\u201311", explain:"7\u201311 members recruited via a skills-and-values matrix, staggered 3-year terms, with four standing committees: Governance, Academic Achievement, Finance, Development." } },
   { d:"GOV", owners:["wiegner","franklin"], q:"Your board isn't fully seated. Isn't that a capacity risk?",
     points:["Named seated board: Pettey (CEO, non-voting), Wiegner (Chair), Franklin (Treasurer), Wright (Secretary), Dunn (Member).","Acknowledged gaps with a concrete plan: recruiting finance, legal, and facilities/real-estate expertise; target full board seated by Fall 2026; partnering with Jen Wickens/Seminar to source Spokane candidates.","Frame it as disciplined sequencing, not a hole — recruiting to a matrix rather than filling seats fast."],
     coach:"Be ready to name exactly which seats are still open and your recruiting timeline — a not-yet-full board is a predictable pressure point.",
-    cite:"Prompt 1.2 — Gap Closure Strategy; 3.1 Composition" },
+    cite:"Prompt 1.2 — Gap Closure Strategy; 3.1 Composition",
+    quiz:{ q:"What's the target date for a fully seated board?", choices:["Fall 2026", "Fall 2027", "Fall 2025"], answer:"Fall 2026", explain:"Gaps (finance, legal, facilities/real-estate expertise) are being recruited to a matrix on a disciplined timeline, not filled fast \u2014 full board seated by Fall 2026." } },
   { d:"GOV", owners:["wiegner"], q:"How does the board hold itself accountable, not just the CEO?",
     points:["Annual summer retreat to set goals and committee workplans; a board KPI dashboard reviewed at every meeting; a structured annual CEO evaluation run by the Governance Committee; and an annual board self-assessment with a written improvement plan."],
-    cite:"Prompt 3.1 — Board Accountability" },
+    cite:"Prompt 3.1 — Board Accountability",
+    quiz:{ q:"How does the board hold itself (not just the CEO) accountable?", choices:["Annual retreat, board KPI dashboard, structured CEO evaluation, and self-assessment", "Quarterly public elections for board seats", "An external state audit every year"], answer:"Annual retreat, board KPI dashboard, structured CEO evaluation, and self-assessment", explain:"The Governance Committee runs a structured annual CEO evaluation, and the board completes its own self-assessment with a written improvement plan." } },
 
   { d:"COI", core:true, owners:["franklin","wiegner"], q:"Several of your board members are tied to ESWA, which is also your incubation partner. Walk us through those conflicts.",
     points:["Disclosed and managed, not hidden. Wiegner (ESWA Executive in Residence) and Franklin (ESWA co-founder) both <b>recuse from any ESWA contract, programming, or funding vote</b>; all recusals documented in minutes.","Dunn recuses from ESD 101 service-agreement votes (former superintendent there; ESD 101 is a service provider).","The board actively recruits members with no ties to current members or ESWA to protect independence."],
-    cite:"Prompt 3.3 — Identified Relationships table" },
+    cite:"Prompt 3.3 — Identified Relationships table",
+    quiz:{ q:"Which two board members recuse from ESWA contract/funding votes?", choices:["Wiegner and Franklin", "Wright and Dunn", "Pettey and Dunn"], answer:"Wiegner and Franklin", explain:"Wiegner (ESWA Executive in Residence) and Franklin (ESWA co-founder) recuse from all ESWA votes; Dunn separately recuses from ESD 101 votes." } },
   { d:"COI", owners:["franklin"], q:"Mr. Franklin, you're a Gates Foundation program officer and the school may seek Gates-aligned funding. How is that not a conflict?",
     points:["Answer this one directly and without defensiveness: 'I do not make Gates grant decisions for Cedar Grove. I recuse from any board vote involving Gates-connected funding or ESWA contracts, and it's disclosed annually in the minutes and the conflict-of-interest log.'","Reinforce that the mitigation is structural — a signed annual COI policy, mandatory disclosure at the start of any related discussion, leaving the room, and recusal from the vote."],
     coach:"This is the question most likely aimed at you personally. Rehearse it until it's calm and short — over-explaining reads as discomfort.",
-    cite:"Prompt 3.3 — Franklin row; COI Policy" },
+    cite:"Prompt 3.3 — Franklin row; COI Policy",
+    quiz:{ q:"What does Franklin say about his role with Gates Foundation funding?", choices:["He recuses from any related board vote and doesn't make Gates grant decisions for Cedar Grove", "He personally approves all Gates grants to Cedar Grove", "He resigned from the Gates Foundation to avoid the conflict"], answer:"He recuses from any related board vote and doesn't make Gates grant decisions for Cedar Grove", explain:"The mitigation is structural: disclosure at the start of discussion, leaving the room, and recusal from the vote \u2014 documented annually in the minutes and COI log." } },
   { d:"COI", owners:["franklin","wiegner"], q:"What is your actual conflict-of-interest process — mechanically?",
     points:["All board members and the CEO sign a written COI policy annually (aligned to WA nonprofit law and IRS Form 990).","Policy covers both actual and perceived conflicts; anyone with either must disclose at the start of the discussion, leave during deliberation, and be recused from the vote.","Secretary records disclosures, recusals, and votes; the Chair maintains a running conflict log reviewed annually and available to the authorizer on request."],
-    cite:"Prompt 3.3 — Governance Structures to Prevent Conflicts" },
+    cite:"Prompt 3.3 — Governance Structures to Prevent Conflicts",
+    quiz:{ q:"Who signs the written COI policy annually?", choices:["All board members and the CEO", "Only the Board Chair", "Only newly recruited board members"], answer:"All board members and the CEO", explain:"Everyone signs annually, aligned to WA nonprofit law and IRS Form 990; the Secretary records disclosures/recusals and the Chair maintains a conflict log." } },
   { d:"COI", owners:["franklin"], q:"Any contract with a board-connected organization — what stops that from being a sweetheart deal?",
     points:["Competitive review, full-board approval with the interested party recused, and documentation in minutes.","No sole-source contract above the $40,000 threshold (RCW 28A.335.190) without board approval and documented justification; board-connected vendors (ESWA, Elevating Educators LLC, ESD 101) reviewed annually for necessity, value, and arm's-length terms."],
-    cite:"Prompt 3.3 — Procurement; 3.4 contracting" },
+    cite:"Prompt 3.3 — Procurement; 3.4 contracting",
+    quiz:{ q:"What contract value triggers the RCW 28A.335.190 sole-source board-approval threshold?", choices:["$40,000", "$10,000", "$100,000"], answer:"$40,000", explain:"Above $40,000, sole-source contracts need board approval and documented justification; board-connected vendors get an annual arm's-length review." } },
 
   { d:"FIN", core:true, owners:["franklin"], q:"Give us the shape of your five-year budget — revenue drivers and scale.",
     points:["Opens Fall 2027 with 230 students (grades 6 & 9), scaling to 780 (6–12) by Year 5 / FY2032. Revenue grows from ~$4.5M in Year 1 to ~$13.9M at full scale, driven by the grade-by-grade build-out.","State/local funding is primary: BEA ~$13,357/pupil in Year 1 (WA small-schools premium), normalizing as enrollment grows; 2.5% annual revenue escalator.","Federal: CSP grants $400K/yr and IDEA starting $132,921 in Year 1; Title I/II/III per pupil at +1.5%."],
-    cite:"Prompt 3.4 — Revenue Overview" },
+    cite:"Prompt 3.4 — Revenue Overview",
+    quiz:{ q:"What is Cedar Grove's projected revenue at full scale (Year 5)?", choices:["~$13.9M", "~$4.5M", "~$25M"], answer:"~$13.9M", explain:"Revenue grows from ~$4.5M in Year 1 to ~$13.9M at full scale (780 students), driven by the grade-by-grade build-out." } },
   { d:"FIN", owners:["franklin"], q:"How is the school solvent if a philanthropic grant doesn't come through?",
     points:["Philanthropy is treated as <b>non-recurring, non-operating</b> revenue: $300K Yr1, $600K Yr2–4, $300K Yr5.","Recurring state + federal revenue already covers ~95% of expenses in Year 1; philanthropy provides the remaining coverage plus a buffer, and the model shows an operating surplus every year (~$58K Yr1, $279K Yr3, $349K Yr4).","Don't overstate — recurring revenue alone doesn't fully cover Year 1; the ~5% gap plus buffer is what philanthropy fills. Say that plainly."],
-    cite:"Prompt 3.4 — Revenue / Expenditure Overview" },
+    cite:"Prompt 3.4 — Revenue / Expenditure Overview",
+    quiz:{ q:"What share of Year 1 expenses does recurring state + federal revenue already cover?", choices:["~95%", "~60%", "100%"], answer:"~95%", explain:"Recurring revenue alone doesn't fully cover Year 1 \u2014 philanthropy (treated as non-recurring) fills the remaining ~5% gap plus a buffer." } },
   { d:"FIN", core:true, owners:["franklin"], q:"What is your days-cash-on-hand across the projection, and how does it compare to the Commission's threshold?",
     points:["Above the Commission's Stage 2 threshold of 60 days in every year — ranging from 63 days at the lowest (Year 3) to 108 days (Year 1), strengthening to 75 by Year 5.","Enters Year 1 with $1.25M starting cash (~97 days of operating expenses before a single student enrolls).","Board reserve policy: minimum 30 days of operating expenses at all times."],
-    cite:"Prompt 3.4 — Financial Resilience" },
+    cite:"Prompt 3.4 — Financial Resilience",
+    quiz:{ q:"Cedar Grove's days-cash-on-hand stays above the Commission's Stage 2 threshold of:", choices:["60 days, every year (63\u2013108 days)", "30 days, but dips below it in Year 3", "90 days, falling short in Year 2"], answer:"60 days, every year (63\u2013108 days)", explain:"Year 1 opens with $1.25M starting cash (~97 days) before a single student enrolls; board reserve policy floors at 30 days minimum." } },
   { d:"FIN", owners:["franklin"], q:"Enrollment is your biggest revenue risk. What happens if you under-enroll in Year 1?",
     points:["The $1.25M starting cash (~97 days) is the first buffer against a slow ramp.","Levers if enrollment falls short: additional fundraising, staffing reductions, or expenditure cuts — decided by leadership; unanticipated costs are absorbed by reserves before any programmatic cut.","Staffing scales <i>with</i> enrollment (teachers added by MS/HS student counts), so costs partially self-adjust."],
-    cite:"Prompt 3.4 — Contingency Planning; 3.1 staffing" },
+    cite:"Prompt 3.4 — Contingency Planning; 3.1 staffing",
+    quiz:{ q:"What's the first buffer against a slow Year 1 enrollment ramp?", choices:["The $1.25M starting cash (~97 days of operating expenses)", "An emergency loan from the school district", "Immediate staff layoffs"], answer:"The $1.25M starting cash (~97 days of operating expenses)", explain:"Staffing also scales with enrollment, so costs partially self-adjust before any programmatic cut is considered." } },
   { d:"FIN", owners:["franklin"], q:"What's your largest cost, and how do you keep it disciplined?",
     points:["Personnel — ~53% of expenses in Year 1 rising to ~59% at full scale; ~24 FTE growing to ~69 at maturity. Salaries +3%/yr, benefits at 30% of salary.","Staffing is enrollment-driven, not ahead of it: student-teacher ~21:1 (23:1 MS, 18:1 HS). Facilities ~$408K/yr all-in; a $5.175M 30-year loan at 5% (~$333K annual debt service).","The Commission's 3%-of-revenue oversight fee is built into contracted services."],
-    cite:"Prompt 3.4 — Expenditure Overview; 3.1 Staffing Model" },
+    cite:"Prompt 3.4 — Expenditure Overview; 3.1 Staffing Model",
+    quiz:{ q:"What is Cedar Grove's largest expense category?", choices:["Personnel (~53% of expenses in Year 1, rising to ~59%)", "Facilities", "Technology"], answer:"Personnel (~53% of expenses in Year 1, rising to ~59%)", explain:"Staffing is enrollment-driven, not ahead of it \u2014 student-teacher ratio ~21:1, growing from ~24 FTE to ~69 at maturity." } },
   { d:"FIN", owners:["franklin"], q:"Who manages the money day-to-day, and what are your controls and audit plan?",
     points:["Year 1: COO handles day-to-day finance, supported by a part-time CFO/Finance Manager (0.3 FTE) with charter/WA reporting expertise; payroll is outsourced for separation of duties.","Cloud accounting aligned to OSPI's WSIPC chart of accounts from day one; annual independent CPA audit (K–12 experience, competitively selected), full engagement from Year 2 (~$30K/yr), results to the full board.","Contracts above $40,000 (RCW 28A.335.190) require ≥3 qualified proposals scored on experience, WA familiarity, references, and cost."],
-    cite:"Prompt 3.4 — Financial Policies / Fiscal Staffing" },
+    cite:"Prompt 3.4 — Financial Policies / Fiscal Staffing",
+    quiz:{ q:"Who handles day-to-day finance in Year 1?", choices:["The COO, supported by a part-time CFO/Finance Manager (0.3 FTE)", "A full-time in-house CFO from day one", "The Board Treasurer, personally"], answer:"The COO, supported by a part-time CFO/Finance Manager (0.3 FTE)", explain:"Payroll is outsourced for separation of duties, and an independent CPA audit begins full engagement from Year 2 (~$30K/yr)." } },
 
   { d:"ENROLL", core:true, owners:["pettey"], q:"Why should we believe you can fill 230 seats in Year 1?",
     points:["Year 1 target (140 sixth-graders, 90 ninth-graders) is ~3% and ~2% of Spokane's annual cohorts (~4,200 6th, ~4,483 9th); full capacity of 780 is ~1.3% of the regional 6–12 market.","Documented demand: 90 completed surveys, 50+ signed supporter cards, 15+ stakeholder meetings, 35–40+ Design Team participants.","Independent corroboration via Education Data Collective — 32,000+ school-age children in the draw area; charter enrollment up 65% in 99207 since 2019."],
-    cite:"Prompt 1.1 / 2.4 — demand evidence; Independent Evidence" },
+    cite:"Prompt 1.1 / 2.4 — demand evidence; Independent Evidence",
+    quiz:{ q:"What is the Year 1 enrollment target?", choices:["230 students (140 sixth-graders + 90 ninth-graders)", "300 students (150 sixth + 150 ninth)", "150 students, sixth grade only"], answer:"230 students (140 sixth-graders + 90 ninth-graders)", explain:"That's only ~3% and ~2% of Spokane's annual 6th/9th cohorts \u2014 full capacity of 780 is ~1.3% of the regional 6\u201312 market." } },
   { d:"ENROLL", owners:["pettey"], q:"What's the recruitment plan and who's running it? Enrollment is where charters fail.",
     points:["Direct outreach to 8th-grade families, trusted-partner channels (Boys & Girls Club, Communities in Schools, YMCA, AIER, Unity in the Community), a Family Ambassador model, and multilingual materials.","Enrollment consultant Vanessa Barry (Mariposa) — an ESWA-portfolio specialist in charter enrollment via social, events, and earned media — works directly with Melissa on the launch plan.","Open lottery compliant with WA charter law; recruitment tracked by ZIP, feeder school, and first-gen status."],
-    cite:"Prompt 2.4 Enrollment Strategy; 3.2 Marketing & Recruitment" },
+    cite:"Prompt 2.4 Enrollment Strategy; 3.2 Marketing & Recruitment",
+    quiz:{ q:"Who is Cedar Grove's enrollment consultant?", choices:["Vanessa Barry (Mariposa)", "Jen Wickens (Seminar)", "The CEO, working alone"], answer:"Vanessa Barry (Mariposa)", explain:"Vanessa Barry is an ESWA-portfolio specialist in charter enrollment via social, events, and earned media, working directly with the CEO on the launch plan." } },
 
   { d:"FACILITY", core:true, owners:["pettey"], q:"You don't have a signed facility. What's the status and the backup?",
     points:["Active search on multiple fronts. Lead near-term option: co-location with Innovation Public Schools (811 E. Sprague) — the owner (Growler Co.) and Innovation's ED and Board Chair have confirmed a co-location would be welcomed (letter of support, Attachment 11).","Three additional sites identified via 4 Degrees Real Estate (the firm that sited Lumen); two downtown near the bus plaza, one near Innovation.","Goal: evaluate 2–4 options by Spring 2027 and secure a lease/MOU before opening. Long-term preference is to own, exploring Opportunity Zone / New Market Tax Credit financing."],
     coach:"Facilities lead is currently Melissa; a board member with real-estate expertise is still being recruited. Be ready to say who takes primary ownership and when.",
-    cite:"Prompt 2.4 — Facilities Needs and Current Status" },
+    cite:"Prompt 2.4 — Facilities Needs and Current Status",
+    quiz:{ q:"What is the lead near-term facility option?", choices:["Co-location with Innovation Public Schools (811 E. Sprague)", "A signed long-term lease downtown near the bus plaza", "Purchasing a former church building"], answer:"Co-location with Innovation Public Schools (811 E. Sprague)", explain:"The owner and Innovation's ED/Board Chair have confirmed support in writing; three more sites are identified via 4 Degrees Real Estate as backups." } },
   { d:"FACILITY", owners:["pettey"], q:"What are your actual space requirements, Year 1 and at build-out?",
     points:["Year 1: ~24,000–26,000 sq ft — 10 classrooms, 2 SpEd/intervention rooms, gym/multipurpose, wellness room, counseling/college center, offices. Science labs added from Year 2.","Space scales with the grade build-out toward full enrollment of 780, adding science labs, expanded intervention space, and a full gym."],
-    cite:"Prompt 2.4 — Space Requirements" },
+    cite:"Prompt 2.4 — Space Requirements",
+    quiz:{ q:"What is the approximate Year 1 space requirement?", choices:["~24,000\u201326,000 sq ft", "~10,000 sq ft", "~50,000 sq ft"], answer:"~24,000\u201326,000 sq ft", explain:"10 classrooms, 2 SpEd/intervention rooms, gym/multipurpose, wellness room, counseling/college center \u2014 science labs are added from Year 2." } },
 
   { d:"COMMUNITY", owners:["pettey","wright"], q:"Show us this was built WITH the community, not just marketed to it.",
     points:["Engagement prioritized listening before designing: 15+ formal stakeholder meetings, two Design Team phases (35–40+ participants), 10+ community events, 90 surveys, 50+ supporter cards.","Concrete design changes from feedback — expanding to include middle school, and elevating belonging/joy/athletics as core elements after families named them.","Partners: Carl Maxey Center, Communities in Schools, New Developed Nations, Seattle U PEBCI, plus higher-ed guidance from EWU and Seattle U."],
-    cite:"Prompt 1.1 — Stakeholder Engagement" },
+    cite:"Prompt 1.1 — Stakeholder Engagement",
+    quiz:{ q:"What concrete change resulted from community feedback?", choices:["Expanding to include middle school and elevating belonging/joy/athletics", "Removing the June Term program", "Shortening the school day"], answer:"Expanding to include middle school and elevating belonging/joy/athletics", explain:"That came out of 15+ stakeholder meetings, two Design Team phases, and 90 completed surveys \u2014 listening before designing." } },
   { d:"COMMUNITY", owners:["wright"], q:"How do you keep community engagement from becoming performative once you're authorized?",
     points:["Design Team 2.0 continues through opening; closing the feedback loop (telling families how their input changed decisions) is an explicit commitment.","Dr. Wright — whose expertise is anti-oppressive pedagogy and belonging — guides the co-creation process specifically to keep it substantive rather than performative.","Ongoing structures: annual climate surveys with public results and 30-day action plans, a student advisory council, and an annual plain-language community report card."],
-    cite:"Prompt 3.2 — Gathering and Using Input" },
+    cite:"Prompt 3.2 — Gathering and Using Input",
+    quiz:{ q:"Who guides community co-creation to keep it substantive rather than performative?", choices:["Dr. Wright", "Melissa Pettey", "An outside consulting firm"], answer:"Dr. Wright", explain:"Her expertise is anti-oppressive pedagogy and belonging; closing the feedback loop with families is an explicit, ongoing commitment through Design Team 2.0." } },
 
   { d:"RISK", core:true, owners:["pettey","wiegner"], q:"What's the single biggest risk to opening, and how are you managing it?",
     points:["Naming it plainly: disrupting Spokane's neighborhood-school norm — choosing a new public option feels unfamiliar and risky to families.","Evidence the ground is shifting: private enrollment up 25.8%; SPS down ~1,800 students (~6%) since 2021. Strategy targets families already making active choices and builds through trusted networks.","Secondary risks — facility and educator recruitment — have concrete mitigation (multiple sites, mission-aligned hiring, ESWA incubation support)."],
-    cite:"1.1 Coalition Challenges; NOI Anticipated Challenges" },
+    cite:"1.1 Coalition Challenges; NOI Anticipated Challenges",
+    quiz:{ q:"What's named as the single biggest risk to opening?", choices:["Disrupting Spokane's neighborhood-school norm \u2014 a new option feels unfamiliar", "Running out of philanthropic funding in Year 1", "Failing the SBAC in Year 1"], answer:"Disrupting Spokane's neighborhood-school norm \u2014 a new option feels unfamiliar", explain:"The strategy targets families already making active choices \u2014 private enrollment is up 25.8% while SPS is down ~6% since 2021." } },
   { d:"RISK", owners:["pettey","dunn"], q:"Educator recruitment is brutal right now. How do you staff a brand-new school?",
     points:["Mission-aligned hiring against published rubrics, ongoing professional learning, and systems built for collaboration and retention.","Talent depth on the board: Wiegner built human-capital systems at DSST and launched campuses at Uncommon; job descriptions and a talent strategy are already developed.","Summer camps and a Year-1 founding-team hiring timeline (all roles posted by 12/1/2026, founding staff hired by Feb 2027)."],
-    cite:"1.2 team; 3.2 milestones" }
+    cite:"1.2 team; 3.2 milestones",
+    quiz:{ q:"By when are all founding roles targeted to be posted?", choices:["12/1/2026", "6/1/2026", "12/1/2027"], answer:"12/1/2026", explain:"Founding staff are targeted to be hired by Feb 2027, backed by mission-aligned hiring rubrics and board talent depth (Wiegner built human-capital systems at DSST/Uncommon)." } }
 ];
 
 /* ================= Persistence ================= */
@@ -338,7 +417,8 @@ const rKey = i => "cg_rate_"+i;
 
 /* ================= State ================= */
 let seat = store.get("cg_seat") || null;
-let state = { tab: seat ? "prep" : "seat", topic: null, scope: seat ? "mine" : "all", pickSeat: false };
+let state = { tab: seat ? "prep" : "seat", topic: null, scope: seat ? "mine" : "all", pickSeat: false, quizScreen: "setup" };
+let quizState = { scope: seat ? "mine" : "all", sections: [], length: 10, session: null };
 
 /* ================= Helpers ================= */
 const EMBLEM = `<svg class="aemblem" viewBox="0 0 120 100" aria-hidden="true">
@@ -469,6 +549,143 @@ function screenProgress(){
     <button class="btn ghost" data-act="reset" style="margin-top:14px;">Reset all readiness marks</button>`;
 }
 
+/* ================= Quiz ================= */
+const FLAME = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 10-12h-6l1-8Z"/></svg>`;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function quizPool(){
+  let list = Q.map((item,idx)=>({item,idx}));
+  if (quizState.scope==="mine") list = list.filter(o => seat && (o.item.owners.includes(seat) || o.item.core));
+  else if (quizState.scope==="sections") list = list.filter(o => quizState.sections.includes(o.item.d));
+  return list;
+}
+function quizScopeKey(){
+  if (quizState.scope==="mine") return "mine:"+(seat||"none");
+  if (quizState.scope==="sections") return "sections:"+quizState.sections.slice().sort().join(",");
+  return "all";
+}
+function quizBestKey(){ return "cg_quiz_best_"+quizScopeKey(); }
+function getQuizBest(){ try { const v = store.get(quizBestKey()); return v ? JSON.parse(v) : { pct:0, streak:0 }; } catch(e){ return { pct:0, streak:0 }; } }
+function saveQuizBest(pct, streak){
+  const cur = getQuizBest();
+  const next = { pct: Math.max(cur.pct, pct), streak: Math.max(cur.streak, streak) };
+  store.set(quizBestKey(), JSON.stringify(next));
+  return { improvedScore: pct > cur.pct, improvedStreak: streak > cur.streak, prev: cur };
+}
+function prepQuestion(){
+  const s = quizState.session;
+  const item = s.items[s.i].item;
+  s.choiceOrder = shuffle(item.quiz.choices);
+  s.selected = null;
+  s.revealed = false;
+}
+function startQuiz(){
+  const pool = shuffle(quizPool());
+  const n = quizState.length==="all" ? pool.length : Math.min(quizState.length, pool.length);
+  quizState.session = { items: pool.slice(0,n), i:0, score:0, streak:0, bestStreakRun:0, missed:[], choiceOrder:null, selected:null, revealed:false };
+  prepQuestion();
+  state.quizScreen = "play";
+}
+
+function screenQuizSetup(){
+  const best = getQuizBest();
+  const mineOK = !!seat;
+  const scopeRows = `
+    <button class="roleopt${quizState.scope==='mine'?' sel':''}${mineOK?'':' qz-disabled'}" data-qscope="mine" ${mineOK?'':'disabled'}>
+      <div class="n">My assigned items</div><div class="r">${mineOK?`What ${MEMBERS[seat].short} owns, plus shared essentials`:'Pick your seat in My Seat first'}</div>
+    </button>
+    <button class="roleopt${quizState.scope==='sections'?' sel':''}" data-qscope="sections">
+      <div class="n">Certain sections</div><div class="r">Choose one or more topics</div>
+    </button>
+    <button class="roleopt${quizState.scope==='all'?' sel':''}" data-qscope="all">
+      <div class="n">Whole prep doc</div><div class="r">Every question, every domain</div>
+    </button>`;
+  const sectionPicker = quizState.scope==="sections" ? `<div class="chiprow">${Object.keys(DOMAINS).map(k=>
+      `<button data-qsection="${k}" class="${quizState.sections.includes(k)?'on':''}">${DOMAINS[k].name}</button>`).join("")}</div>` : "";
+  const poolSize = quizPool().length;
+  const lengths = [5,10,"all"];
+  const lenSeg = `<div class="seg">${lengths.map(l=>
+      `<button data-qlen="${l}" class="${quizState.length===l?'on':''}">${l==="all"?"All":l}</button>`).join("")}</div>`;
+  const bestNote = (best.pct>0 || best.streak>0)
+    ? `<div class="qz-best"><b>Best for this quiz:</b> ${best.pct}% correct · longest streak ${best.streak}</div>` : "";
+  const canStart = poolSize>0 && (quizState.scope!=="sections" || quizState.sections.length>0) && (quizState.scope!=="mine" || mineOK);
+  return `<p class="eyebrow">Quiz</p>
+    <p class="lead">Quick-fire multiple choice, three answers per question. Get one wrong and we'll teach it right back to you.</p>
+    ${scopeRows}${sectionPicker}
+    <p class="lead" style="margin-top:18px;">How many questions?</p>
+    ${lenSeg}
+    <p class="lead" style="margin:10px 0 0;">${poolSize} question${poolSize!==1?'s':''} available in this scope.</p>
+    ${bestNote}
+    <button class="btn primary" data-act="startquiz" ${canStart?'':'disabled'} style="margin-top:16px;">Start Quiz →</button>`;
+}
+
+function screenQuizPlay(){
+  const s = quizState.session;
+  const o = s.items[s.i];
+  const item = o.item;
+  const total = s.items.length;
+  const frac = (s.i + (s.revealed?1:0)) / total;
+  const streakBadge = s.streak>1 ? `<div class="qz-streak">${FLAME}${s.streak} streak</div>` : `<div class="qz-streak">Score ${s.score}/${s.i}</div>`;
+  const choices = s.choiceOrder.map(c=>{
+    let cls = "qz-choice";
+    let dis = "";
+    if (s.revealed){
+      dis = "disabled";
+      if (c===item.quiz.answer) cls += " correct";
+      else if (c===s.selected) cls += " wrong";
+    }
+    return `<button class="${cls}" data-qchoice="${encodeURIComponent(c)}" ${dis}>${c}</button>`;
+  }).join("");
+  const wasRight = s.selected===item.quiz.answer;
+  const feedback = s.revealed ? `<div class="qz-feedback ${wasRight?'ok':'no'}">
+      <b>${wasRight?'Nice — that\'s right':'Not quite — here\'s the teaching point'}</b>
+      ${item.quiz.explain}
+      <div class="qz-cite">Source · ${item.cite}</div>
+    </div>
+    <button class="btn primary" data-act="qznext" style="margin-top:14px;">${s.i+1<total?'Next question →':'See results →'}</button>` : "";
+  return `<div class="qz-progwrap">
+      <div class="qz-progtext">Q ${s.i+1} / ${total}</div>
+      <div class="qz-track"><i style="width:${Math.round(frac*100)}%"></i></div>
+      ${streakBadge}
+    </div>
+    <div class="qz-code">${DOMAINS[item.d].code}</div>
+    <div class="qz-stem">${item.quiz.q}</div>
+    <div class="qz-choices">${choices}</div>
+    ${feedback}`;
+}
+
+function screenQuizResults(){
+  const s = quizState.session;
+  const total = s.items.length;
+  const pct = total ? Math.round(s.score/total*100) : 0;
+  const { improvedScore, improvedStreak } = saveQuizBest(pct, s.bestStreakRun);
+  const badges = `${improvedScore?'<span class="qz-badge">New best score</span>':''}${improvedStreak?'<span class="qz-badge">New best streak</span>':''}`;
+  const celebrate = pct>=80;
+  const confetti = celebrate ? `<div class="qz-confetti">${[...Array(10)].map((_,i)=>`<span style="--i:${i}"></span>`).join("")}</div>` : "";
+  const missed = s.missed.length ? `<div class="qz-lead2">Review what tripped you up</div>${s.missed.map(m=>`
+      <div class="qz-missrow">
+        <div class="qz-missq">${m.item.quiz.q}</div>
+        <div class="qz-missa"><b>${m.item.quiz.answer}</b> — ${m.item.quiz.explain}</div>
+      </div>`).join("")}` : `<p class="lead">Clean sweep — nothing to review.</p>`;
+  return `<div class="qz-resultwrap">${confetti}
+      <div class="bigring">${ring(total?s.score/total:0,64)}<div class="lbl"><b>${s.score} / ${total}</b>correct — ${pct}%</div></div>
+    </div>
+    <p class="lead">Longest streak this round: <b>${s.bestStreakRun}</b>. ${badges}</p>
+    ${missed}
+    <button class="btn primary" data-act="qzagain" style="margin-top:16px;">Play again →</button>
+    <button class="btn ghost" data-act="qznewsetup">Change scope</button>`;
+}
+
+function screenQuiz(){
+  if (state.quizScreen==="play" && quizState.session) return screenQuizPlay();
+  if (state.quizScreen==="results" && quizState.session) return screenQuizResults();
+  return screenQuizSetup();
+}
+
 /* ================= Render ================= */
 const appbar = document.getElementById("appbar");
 const screenInner = document.getElementById("screenInner");
@@ -478,14 +695,18 @@ const tabbar = document.getElementById("tabbar");
 const TABS = [
   { id:"prep",     label:"Prep",     icon:'<path d="M4 6h16M4 12h16M4 18h10"/>' },
   { id:"seat",     label:"My Seat",  icon:'<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.4 3.1-5.5 7-5.5s7 2.1 7 5.5"/>' },
+  { id:"quiz",     label:"Quiz",     icon:'<path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/>' },
   { id:"progress", label:"Progress", icon:'<path d="M5 20V10M12 20V4M19 20v-7"/>' }
 ];
 
 function renderAppbar(){
   if (state.tab==="prep" && state.topic){
     appbar.innerHTML = `<button class="backbtn" data-act="back" aria-label="Back">‹</button><div class="atitle">${DOMAINS[state.topic].name}</div>`;
+  } else if (state.tab==="quiz" && state.quizScreen!=="setup"){
+    const t = state.quizScreen==="results" ? "Results" : "Quiz";
+    appbar.innerHTML = `<button class="backbtn" data-act="quizback" aria-label="Back">‹</button><div class="atitle">${t}</div>`;
   } else {
-    const t = state.tab==="prep" ? "Board Prep" : state.tab==="seat" ? "My Seat" : "Team Progress";
+    const t = state.tab==="prep" ? "Board Prep" : state.tab==="seat" ? "My Seat" : state.tab==="quiz" ? "Quiz" : "Team Progress";
     appbar.innerHTML = `${EMBLEM}<div class="atitle">${t}</div>`;
   }
 }
@@ -499,6 +720,7 @@ function render(){
   let html = "";
   if (state.tab==="prep") html = state.topic ? screenTopic(state.topic) : screenPrepList();
   else if (state.tab==="seat") html = screenSeat();
+  else if (state.tab==="quiz") html = screenQuiz();
   else html = screenProgress();
   screenInner.innerHTML = html;
   screenEl.scrollTop = 0;
@@ -507,6 +729,7 @@ function render(){
 /* ================= Events ================= */
 appbar.addEventListener("click",(e)=>{
   if (e.target.closest('[data-act="back"]')){ state.topic=null; render(); }
+  if (e.target.closest('[data-act="quizback"]')){ state.quizScreen="setup"; render(); }
 });
 
 tabbar.addEventListener("click",(e)=>{
@@ -517,6 +740,32 @@ tabbar.addEventListener("click",(e)=>{
 screenEl.addEventListener("click",(e)=>{
   const topicBtn = e.target.closest(".trow");
   if (topicBtn){ state.topic=topicBtn.dataset.topic; render(); return; }
+
+  const qscopeBtn = e.target.closest("[data-qscope]");
+  if (qscopeBtn){ if(!qscopeBtn.disabled){ quizState.scope=qscopeBtn.dataset.qscope; render(); } return; }
+
+  const qsectionBtn = e.target.closest("[data-qsection]");
+  if (qsectionBtn){
+    const k = qsectionBtn.dataset.qsection;
+    const i = quizState.sections.indexOf(k);
+    if (i===-1) quizState.sections.push(k); else quizState.sections.splice(i,1);
+    render(); return;
+  }
+
+  const qlenBtn = e.target.closest("[data-qlen]");
+  if (qlenBtn){ const v=qlenBtn.dataset.qlen; quizState.length = v==="all" ? "all" : Number(v); render(); return; }
+
+  const qchoiceBtn = e.target.closest("[data-qchoice]");
+  if (qchoiceBtn){
+    const s = quizState.session;
+    if (!s || s.revealed) return;
+    const item = s.items[s.i].item;
+    const choice = decodeURIComponent(qchoiceBtn.dataset.qchoice);
+    s.selected = choice; s.revealed = true;
+    if (choice === item.quiz.answer){ s.score++; s.streak++; s.bestStreakRun = Math.max(s.bestStreakRun, s.streak); }
+    else { s.streak = 0; s.missed.push({ item, idx: s.items[s.i].idx }); }
+    render(); return;
+  }
 
   const segBtn = e.target.closest(".seg button");
   if (segBtn){ state.scope=segBtn.dataset.scope; render(); return; }
@@ -531,6 +780,14 @@ screenEl.addEventListener("click",(e)=>{
     else if (a==="changeseat"){ state.pickSeat=true; render(); }
     else if (a==="cancelpick"){ state.pickSeat=false; render(); }
     else if (a==="reset"){ if(confirm("Clear every readiness mark for this device?")){ Q.forEach((_,i)=>store.del(rKey(i))); render(); } }
+    else if (a==="startquiz"){ if(!act.disabled){ startQuiz(); render(); } }
+    else if (a==="qznext"){
+      const s = quizState.session;
+      if (s.i+1 < s.items.length){ s.i++; prepQuestion(); render(); }
+      else { state.quizScreen="results"; render(); }
+    }
+    else if (a==="qzagain"){ startQuiz(); render(); }
+    else if (a==="qznewsetup"){ state.quizScreen="setup"; quizState.session=null; render(); }
     return;
   }
 
