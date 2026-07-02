@@ -623,13 +623,26 @@ function screenQuizSetup(){
     <button class="btn primary" data-act="startquiz" ${canStart?'':'disabled'} style="margin-top:16px;">Start Quiz →</button>`;
 }
 
+function quizStreakHTML(s){
+  return s.streak>1 ? `<div class="qz-streak">${FLAME}${s.streak} streak</div>` : `<div class="qz-streak">Score ${s.score}/${s.i}</div>`;
+}
+function quizFeedbackHTML(s){
+  if (!s.revealed) return "";
+  const item = s.items[s.i].item;
+  const total = s.items.length;
+  const wasRight = s.selected===item.quiz.answer;
+  return `<div class="qz-feedback ${wasRight?'ok':'no'}">
+      <b>${wasRight?'Nice — that\'s right':'Not quite — here\'s the teaching point'}</b>
+      ${item.quiz.explain}
+      <div class="qz-cite">Source · ${item.cite}</div>
+    </div>
+    <button class="btn primary" data-act="qznext" style="margin-top:14px;">${s.i+1<total?'Next question →':'See results →'}</button>`;
+}
 function screenQuizPlay(){
   const s = quizState.session;
-  const o = s.items[s.i];
-  const item = o.item;
+  const item = s.items[s.i].item;
   const total = s.items.length;
   const frac = (s.i + (s.revealed?1:0)) / total;
-  const streakBadge = s.streak>1 ? `<div class="qz-streak">${FLAME}${s.streak} streak</div>` : `<div class="qz-streak">Score ${s.score}/${s.i}</div>`;
   const choices = s.choiceOrder.map(c=>{
     let cls = "qz-choice";
     let dis = "";
@@ -640,22 +653,15 @@ function screenQuizPlay(){
     }
     return `<button class="${cls}" data-qchoice="${encodeURIComponent(c)}" ${dis}>${c}</button>`;
   }).join("");
-  const wasRight = s.selected===item.quiz.answer;
-  const feedback = s.revealed ? `<div class="qz-feedback ${wasRight?'ok':'no'}">
-      <b>${wasRight?'Nice — that\'s right':'Not quite — here\'s the teaching point'}</b>
-      ${item.quiz.explain}
-      <div class="qz-cite">Source · ${item.cite}</div>
-    </div>
-    <button class="btn primary" data-act="qznext" style="margin-top:14px;">${s.i+1<total?'Next question →':'See results →'}</button>` : "";
   return `<div class="qz-progwrap">
       <div class="qz-progtext">Q ${s.i+1} / ${total}</div>
       <div class="qz-track"><i style="width:${Math.round(frac*100)}%"></i></div>
-      ${streakBadge}
+      ${quizStreakHTML(s)}
     </div>
     <div class="qz-code">${DOMAINS[item.d].code}</div>
     <div class="qz-stem">${item.quiz.q}</div>
     <div class="qz-choices">${choices}</div>
-    ${feedback}`;
+    <div id="qzFeedback">${quizFeedbackHTML(s)}</div>`;
 }
 
 function screenQuizResults(){
@@ -729,7 +735,13 @@ function render(){
 /* ================= Events ================= */
 appbar.addEventListener("click",(e)=>{
   if (e.target.closest('[data-act="back"]')){ state.topic=null; render(); }
-  if (e.target.closest('[data-act="quizback"]')){ state.quizScreen="setup"; render(); }
+  if (e.target.closest('[data-act="quizback"]')){
+    if (state.quizScreen==="play"){
+      if (!confirm("Leave this quiz? Your progress in this round will be lost.")) return;
+      quizState.session=null;
+    }
+    state.quizScreen="setup"; render();
+  }
 });
 
 tabbar.addEventListener("click",(e)=>{
@@ -764,7 +776,18 @@ screenEl.addEventListener("click",(e)=>{
     s.selected = choice; s.revealed = true;
     if (choice === item.quiz.answer){ s.score++; s.streak++; s.bestStreakRun = Math.max(s.bestStreakRun, s.streak); }
     else { s.streak = 0; s.missed.push({ item, idx: s.items[s.i].idx }); }
-    render(); return;
+    // Reveal in place — mark choices, drop in feedback, nudge progress; no full re-render (avoids scroll jump).
+    screenInner.querySelectorAll(".qz-choice").forEach(b=>{
+      b.disabled = true;
+      const c = decodeURIComponent(b.dataset.qchoice);
+      if (c===item.quiz.answer) b.classList.add("correct");
+      else if (c===s.selected) b.classList.add("wrong");
+    });
+    const badge = screenInner.querySelector(".qz-streak"); if (badge) badge.outerHTML = quizStreakHTML(s);
+    const bar = screenInner.querySelector(".qz-track i"); if (bar) bar.style.width = Math.round((s.i+1)/s.items.length*100)+"%";
+    const fb = document.getElementById("qzFeedback");
+    if (fb){ fb.innerHTML = quizFeedbackHTML(s); fb.scrollIntoView({ block:"nearest" }); }
+    return;
   }
 
   const segBtn = e.target.closest(".seg button");
