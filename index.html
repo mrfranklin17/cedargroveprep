@@ -205,6 +205,17 @@
   .qz-confetti span:nth-child(3n+1) { background: var(--sky-line); }
   @keyframes confetti-fall { from { transform: translateY(-10px) rotate(0deg); opacity: 1; } to { transform: translateY(70px) rotate(200deg); opacity: 0; } }
 
+  /* ---------- Interview ---------- */
+  .ivagenda { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 6px 14px; margin-bottom: 6px; }
+  .ivagenda .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: .86rem; color: var(--ink); padding: 9px 0; border-bottom: 1px solid var(--line-soft); }
+  .ivagenda .row:last-child { border-bottom: none; }
+  .ivagenda .t { font-family: var(--mono); font-size: .64rem; letter-spacing: .04em; color: var(--sage-d); white-space: nowrap; flex: none; }
+  .ivgroup { font-family: var(--serif); font-size: 1.04rem; font-weight: 600; color: var(--forest); margin: 24px 0 11px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .ivcrit { background: var(--sky-tint); border: 1px solid var(--sky-line); border-radius: 8px; padding: 10px 13px; margin: 4px 0 6px; }
+  .ivcrit h4 { font-family: var(--mono); font-size: .58rem; letter-spacing: .13em; text-transform: uppercase; color: var(--green-d); margin: 2px 0 7px; }
+  .ivcrit ul { margin: 0; padding-left: 17px; }
+  .ivcrit li { font-size: .85rem; margin-bottom: 4px; color: var(--ink); }
+
   :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .qz-confetti { display: none; } }
   @media (min-width: 760px) { .screen-inner { max-width: 680px; } }
@@ -407,6 +418,92 @@ const Q = [
     quiz:{ q:"By when are all founding roles targeted to be posted?", choices:["12/1/2026", "6/1/2026", "12/1/2027"], answer:"12/1/2026", explain:"Founding staff are targeted to be hired by Feb 2027, backed by mission-aligned hiring rubrics and board talent depth (Wiegner built human-capital systems at DSST/Uncommon)." } }
 ];
 
+/* ===== The actual Capacity Interview: verbatim Commission questions, reviewer criteria, and how our team answers ===== */
+const IV_AGENDA = [
+  ["0:00–0:05", "Welcome & overview"],
+  ["0:05–0:40", "Capacity interview — the 10 questions (~3.5 min each)"],
+  ["0:40–0:50", "Review & team calibration break"],
+  ["0:50–1:15", "Financial & operational performance task"],
+  ["1:15–1:40", "Governance & leadership performance task"],
+  ["1:40–2:00", "Our questions & closing"]
+];
+const IV_CITE = "WA Charter Commission — Capacity Interview Questions";
+const INTERVIEW = [
+  { id:1, tag:"Q1", group:"Educational Program & Student Experience", d:"MODEL", cite:IV_CITE, owners:["dunn","wright","pettey"],
+    q:"Walk us through a day in the life of one of your students in Year 1. What would we see in classrooms, and how would you know it's working?",
+    looking:["Alignment between mission, vision, and daily practice","A coherent student experience","Clear indicators of success","Evidence the model is implementable, not just aspirational"],
+    points:["Tell it as one student's arc: they start in advisory with the anchor adult who follows them 6–12, then a Socratic 'canopy conversation' in a core class where students lead and defend ideas — rigor is how they think, not how much they do.","Support is scheduled, not bolted on: an embedded intervention block, co-teaching, and UDL mean a struggling student gets more support on the same college-prep content, never a lower track.","Belonging and the outdoors are in the day by design — advisory/restorative circles, athletics and outdoor learning inside the school day, not gatekept.","How we'd know it's working: chronic absenteeism under 10%, students running seminars, formative data on a review cycle, and 85%+ reporting they feel known and challenged on climate surveys."],
+    coach:"~3.5 minutes per answer — tell one vivid student story, not a feature list, and name the indicators you'd watch so it lands as implementable, not aspirational.",
+    quiz:{ q:"In a typical Cedar Grove class, what is the default mode of instruction?", choices:["A student-led Socratic 'canopy conversation'","A lecture with note-taking","Independent worksheet practice"], answer:"A student-led Socratic 'canopy conversation'", explain:"Canopy conversations — Socratic seminars in every subject, 6–12 — are the default; rigor is defined as the quality of thinking, with students leading and defending ideas." } },
+
+  { id:2, tag:"Q2", group:"Educational Program & Student Experience", d:"STUDENTS", cite:IV_CITE, owners:["wright","franklin","pettey"],
+    q:"Charter schools enroll every student the lottery sends. Tell us how a student your model wasn't primarily designed for — a multilingual learner, a student with an IEP or 504, a student who arrives below grade level — experiences your school and gets what they need.",
+    looking:["Understanding of diverse learner needs","Integrated supports rather than add-on services","Operational readiness to serve all students","Commitment to equitable access and outcomes"],
+    points:["Start from 'inclusion by design': that student is in the general classroom by default (LRE), with MTSS, co-teaching/push-in, and UDL layered onto the same rigorous curriculum.","Concrete staffing: SpEd related services (psych, speech, OT/PT) contracted through ESD 101 and scaling with enrollment; in-house specialists added as we grow. We planned for ~14% SWD, ~13% EL, ~62% FRL — for this population, not against it.","The intervention block is a structural commitment in the master schedule, so support is a design feature, not a sign of failure — 'what differs across learners is not the expectation but the level of support.'"],
+    coach:"Pick one profile (say an IEP student reading two grades below) and walk their week concretely. Reviewers want integrated supports, not a list of add-on services." },
+
+  { id:3, tag:"Q3", group:"Community Engagement & Demand", d:"ENROLL", cite:IV_CITE, owners:["dunn","franklin","pettey"],
+    q:"How do you know families in Spokane will choose this school? Walk us through what you have done in person, beyond the demographic data, to build real demand and trust.",
+    looking:["Evidence of authentic community engagement","Demonstrated demand beyond enrollment projections","Community influence on school design","Long-term structures for shared accountability"],
+    points:["Lead with what we did in person: 15+ formal stakeholder meetings, two Design Team phases (35–40+ participants), 10+ community events, 90 completed surveys, 50+ signed supporter cards.","Trusted-messenger channels: Boys & Girls Club, Communities in Schools, YMCA, Carl Maxey Center, Unity in the Community — plus a Family Ambassador model and multilingual materials, tracked by ZIP, feeder school, and first-gen status.","Independent corroboration (Education Data Collective): 32,000+ school-age children in the draw area; charter enrollment up 65% in 99207 since 2019 — and Year-1 targets are only ~3% and ~2% of Spokane's 6th/9th cohorts."],
+    coach:"They said 'beyond the demographic data' — spend your time on the relationships and doors you knocked, then use the numbers only to corroborate." },
+
+  { id:4, tag:"Q4", group:"Community Engagement & Demand", d:"COMMUNITY", cite:IV_CITE, owners:["dunn","franklin","pettey"],
+    q:"Give us a specific example of something in your model, calendar, or instruction that you have already changed because the community told you to. How will that feedback loop keep working through Year 1?",
+    looking:["Responsiveness to community voice","Examples of community influence","Continuous engagement strategies","Evidence that engagement is ongoing rather than transactional"],
+    points:["Have the specific example ready: we expanded to include middle school, and elevated belonging, joy, and athletics as core, because families told us to during Design Team sessions.","The loop keeps working: Design Team 2.0 continues through opening; we close the loop by telling families how their input changed decisions; annual climate surveys with public results and 30-day action plans; a student advisory council; and a plain-language community report card."],
+    coach:"Name one concrete change and trace it to the specific feedback, then show the mechanism that keeps the loop alive in Year 1 — that's what proves it isn't transactional.",
+    quiz:{ q:"Name a design change Cedar Grove made because the community asked for it.", choices:["Adding a middle school (grades 6–8)","Dropping the outdoor program","Making uniforms mandatory"], answer:"Adding a middle school (grades 6–8)", explain:"Family input led Cedar Grove to expand to include middle school and to elevate belonging, joy, and athletics as core — a concrete example of community influence on design." } },
+
+  { id:5, tag:"Q5", group:"Organizational Readiness", d:"RISK", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"Which of your core systems — enrollment, finance, SPED compliance, HR — are already built, and which are still in progress? Be specific about what is not done yet and your timeline to finish.",
+    points:["Frame it as an honest inventory. Built and running: the enrollment plan (Mariposa/Vanessa Barry + ESWA cohort support); the financial model on cloud accounting mapped to OSPI's WSIPC chart of accounts; the SpEd service structure via ESD 101; and a talent strategy with job descriptions and a hiring timeline.","Still in progress, with dates: a signed facility (deliberately not before authorization — evaluate 2–4 sites by Spring 2027); full board seated by Fall 2026; the curriculum-to-WA-standards crosswalk by December 2026; founding staff hired by Feb 2027 (all roles posted by 12/1/2026).","Fiscal controls that exist from day one: outsourced payroll for separation of duties, a part-time CFO/Finance Manager (0.3 FTE), and an independent CPA audit engaging fully from Year 2."],
+    coach:"They explicitly asked what is NOT done yet — do exactly that. A candid built-vs-in-progress list with dates reads as readiness; vagueness reads as risk.",
+    quiz:{ q:"Which core system has Cedar Grove deliberately NOT finalized before authorization?", choices:["A signed facility lease","Its chart of accounts","Its SpEd service provider"], answer:"A signed facility lease", explain:"Signing a lease before approval would risk committing to a site that doesn't match the approved enrollment, grades, or timeline — a deliberate choice. Finance systems and the ESD 101 SpEd structure are already defined." } },
+
+  { id:6, tag:"Q6", group:"Organizational Readiness", d:"RISK", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"Where do you feel most under-resourced right now, and what is your plan to close that gap?",
+    points:["Name it honestly rather than deflect: facilities/real-estate expertise is the thinnest spot — the facilities lead is currently the CEO while we recruit a board member with real-estate experience, working sites through 4 Degrees Real Estate and the Innovation co-location conversation.","Development/fundraising capacity is second: the pipeline is real but early (ESWA support, a Charter School Growth Fund meeting, ESWA's federal CSP application), and the Development Committee drives 100% board giving as we build it out.","The plan to close both: recruit to a skills matrix (finance via WA Trust, legal, real-estate) toward a full board by Fall 2026; lean on ESWA incubation; and keep the model's buffers (97 days starting cash, 30-day reserve floor) covering the ramp."],
+    coach:"Reviewers reward self-awareness. Pick the one or two real gaps, own them plainly, and pair each with a concrete step and a date — don't claim you're fully resourced.",
+    quiz:{ q:"What does Cedar Grove name as its thinnest capacity area heading into opening?", choices:["Facilities / real-estate expertise on the board","Curriculum design","Community relationships"], answer:"Facilities / real-estate expertise on the board", explain:"The facilities lead is currently the CEO while the board recruits real-estate expertise (sites via 4 Degrees Real Estate and the Innovation co-location). Owning this gap plainly signals readiness." } },
+
+  { id:7, tag:"Q7", group:"Organizational Readiness", d:"FIN", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"If you open at 80 percent or less of budgeted enrollment, what specifically protects your students and your model? Walk us through the decisions you would make, and what you would refuse to cut.",
+    looking:["Honest assessment of readiness","Understanding of operational requirements","Strategic thinking and risk mitigation","Financial stewardship","Contingency planning","Student-centered decision-making"],
+    points:["First, the buffers that absorb a slow ramp: $1.25M starting cash (~97 days of opex) before a student enrolls, reserves kept at 30+ days, and staffing that scales with enrollment (teachers added by MS/HS counts), so costs partially self-adjust.","What we protect first — and would refuse to cut: direct instruction, special-education and intervention services, and student safety. That is the promise to families and the core of the model.","What we would cut first, in order: deferred capital and 'nice-to-have' facility scope, back-office and non-essential contracts, then intensify fundraising and outreach — reserves absorb unanticipated costs before any programmatic cut."],
+    coach:"The trap is sounding like you'd cut evenly. Lead with what you protect and refuse to cut (kids and instruction), then give a sequenced list of what goes first. That's student-centered stewardship.",
+    quiz:{ q:"If Cedar Grove opens under-enrolled, what does it protect first?", choices:["Direct instruction and student supports","Administrative overhead","Marketing spend"], answer:"Direct instruction and student supports", explain:"Direct instruction, SpEd/intervention, and safety are protected; deferred capital, back-office, and non-essential contracts are cut first, with the $1.25M starting-cash buffer (~97 days) absorbing a slow ramp." } },
+
+  { id:8, tag:"Q8", group:"Governance & Accountability", d:"GOV", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"How is your board drawing the line between governance and management in these founding years? What gaps does the board name in its own composition, and how are you filling them?",
+    points:["Clear division: the board governs, the CEO and staff manage. The board approves and monitors the strategic plan and budget, hires/evaluates/replaces the CEO, adopts policy, and monitors outcomes against authorizer goals; the CEO executes the program, hires/supervises staff, and is a non-voting participant.","Founding-years discipline: a monthly academic dashboard, an annual CEO evaluation run by the Governance Committee, a board KPI dashboard at every meeting, and an annual board self-assessment with a written improvement plan.","Named composition gaps and the fix: seated are Pettey (CEO, non-voting), Wiegner (Chair), Franklin (Treasurer), Wright (Secretary), Dunn (Member); recruiting finance (via WA Trust), legal, and facilities/real-estate expertise to a skills matrix, targeting a full board by Fall 2026 with Jen Wickens/Seminar sourcing candidates."],
+    coach:"Two-part question — answer both halves: the governance/management line, and the specific open seats plus your recruiting plan and date. Don't let the composition-gap half slide." },
+
+  { id:9, tag:"Q9", group:"Governance & Accountability", d:"OUTCOMES", cite:IV_CITE, owners:["wiegner","wright","pettey"],
+    q:"How will you use data to know both that students are growing academically and that they are doing well as whole people? And when the data tells you something is not working, what do you do?",
+    points:["Two lenses, both measured. Academic growth: SBAC plus interim/formative assessments, PSAT/SAT, AP participation (70–75% enrolled, 65–70% scoring 3+), and on-track/credit data — all disaggregated by race, income, IEP/504, and EL.","Whole-person: 90%+ retention with exit interviews, chronic absenteeism below 10%, and bi-annual climate surveys where 85%+ should report feeling known and challenged, reported publicly with 30-day action plans.","When data says something's off: the Academic Achievement Committee reviews meeting/approaching/falling-short status, the CEO brings an action plan, and the board holds them to it — continuous improvement on a defined cycle, not once a year."],
+    coach:"They ask for BOTH academic and whole-person — pair them explicitly. Then close with the 'so what do you do' loop: name the committee, the action plan, and the cadence." },
+
+  { id:10, tag:"Q10", group:"Governance & Accountability", d:"GOV", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"What makes this school durable beyond any one person? Tell us what happens if your founding leader cannot continue, or if Year 1 goes harder than planned.",
+    looking:["Governance maturity","Accountability structures","Continuous improvement systems","Leadership depth","Succession planning","Long-term sustainability"],
+    points:["The honest headline: the school cannot depend on any one person — that's the point of the board's structure and our distributed-leadership design, where every domain has a named lead beyond the CEO.","If the founding leader can't continue: it is the board's core duty to hire, evaluate, and replace the CEO; the Governance Committee runs succession, ESWA incubation provides continuity support and a leadership bench, and documented systems (cloud finance, WSIPC accounting, written policies) mean operations don't live in one head.","If Year 1 goes harder than planned: reserves and 97 days of starting cash absorb shocks, the model shows an operating surplus every year, and monthly board dashboards catch problems early so we adapt rather than react.","Leadership depth is real: Wiegner built human-capital systems at DSST and launched campuses at Uncommon — this team has opened schools before."],
+    coach:"This is the 'Continuity' question — expect it. Answer without flinching: the board's authority to replace the CEO, the ESWA bench, and the systems that outlast individuals. Reassure on maturity; don't improvise.",
+    quiz:{ q:"What makes Cedar Grove durable if the founding leader couldn't continue?", choices:["The board's authority to hire/replace the CEO, distributed leadership, and ESWA continuity support","A single named deputy who takes over automatically","Pausing the school until a new founder is found"], answer:"The board's authority to hire/replace the CEO, distributed leadership, and ESWA continuity support", explain:"Durability comes from structure, not one person: the board hires/evaluates/replaces the CEO, each domain has a named lead, ESWA provides a leadership bench, and documented systems mean operations don't live in one head." } },
+
+  { id:11, tag:"Task 1", group:"Performance Tasks", d:"FIN", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"Financial & Operational scenario — you'll work a live financial/operational problem out loud.",
+    observe:["Financial reasoning","Prioritization","Student-centered decision-making","Risk assessment","Problem-solving"],
+    points:["Expect a scenario (e.g., a mid-year shortfall or enrollment miss); they watch how you reason, not whether you hit a 'right' answer.","Approach out loud: state the student-first principle, quantify the gap, list levers in order (reserves → deferred capital → back-office → fundraising → last-resort staffing), and name what you refuse to cut (instruction, SpEd, safety).","Show roles working together — Franklin frames the numbers, Wiegner frames board oversight, Pettey frames mission impact — and cite the real buffers (97 days cash, 30-day reserve floor, DSCR 1.96x–2.52x)."],
+    coach:"They want your process and teamwork under pressure. Think aloud, assign roles, and tie every trade-off back to students." },
+
+  { id:12, tag:"Task 2", group:"Performance Tasks", d:"GOV", cite:IV_CITE, owners:["wiegner","franklin","pettey"],
+    q:"Governance & Leadership scenario — you'll work a live governance dilemma as a board.",
+    observe:["Governance and leadership role clarity","Collaboration","Decision-making processes","Accountability","Organizational judgement"],
+    points:["Expect a governance dilemma (a conflict of interest, a CEO-performance issue, a board-composition problem) testing whether you keep the governance/management line clean.","Approach: name the policy/structure that applies (COI policy and recusal, CEO evaluation via the Governance Committee, the skills-matrix recruiting plan), decide as a board, and document it — the Chair runs process, the CEO stays in the management lane.","Demonstrate accountability out loud: who discloses, who recuses, who votes, who records it — and how the decision gets communicated."],
+    coach:"Role clarity is the whole test. Let the Chair (Wiegner) run the room, keep the CEO (Pettey) out of board-only decisions, and show a documented, policy-grounded process." }
+];
+
 /* ================= Persistence ================= */
 let mem = {};
 const store = {
@@ -550,6 +647,50 @@ function screenProgress(){
     <button class="btn ghost" data-act="reset" style="margin-top:14px;">Reset all readiness marks</button>`;
 }
 
+/* ================= Interview ================= */
+const ivKey = it => "iv_"+it.id;
+function ivCounts(){ let s=0; INTERVIEW.forEach(it=>{ if(store.get(rKey(ivKey(it)))==="solid") s++; }); return {solid:s,total:INTERVIEW.length}; }
+function ivCardHTML(it){
+  const rating = store.get(rKey(ivKey(it))) || "";
+  const crit = (it.looking||it.observe) ? `<div class="ivcrit"><h4>${it.looking?"What reviewers are looking for":"What reviewers observe"}</h4><ul>${(it.looking||it.observe).map(x=>`<li>${x}</li>`).join("")}</ul></div>` : "";
+  return `<div class="card${rating==="solid"?" solid":""}" data-idx="${ivKey(it)}">
+    <div class="card-top" role="button" tabindex="0" aria-expanded="false">
+      <div class="qcode">${it.tag}</div>
+      <div class="qmain">
+        <div class="qtext">${it.q}</div>
+        <div class="owners">${ownerChips(it.owners)}</div>
+        <div class="hint"><span class="chev">▸</span> Tap for how we answer</div>
+      </div>
+    </div>
+    <div class="answer">
+      <div class="div"></div>
+      ${crit}
+      <h4>How our team answers</h4>
+      <ul>${it.points.map(p=>`<li>${p}</li>`).join("")}</ul>
+      ${it.coach?`<div class="coach"><b>Coach's note:</b> ${it.coach}</div>`:``}
+      <div class="cite">Source · ${it.cite}</div>
+      <div class="rate">
+        <span>Readiness</span>
+        <button data-r="notyet"${rating==="notyet"?' class="on"':''}>Not yet</button>
+        <button data-r="getting"${rating==="getting"?' class="on"':''}>Getting there</button>
+        <button data-r="solid"${rating==="solid"?' class="on ok"':''}>Solid</button>
+      </div>
+    </div></div>`;
+}
+function screenInterview(){
+  const c = ivCounts(); const frac = c.total ? c.solid/c.total : 0;
+  const agenda = `<div class="ivagenda">${IV_AGENDA.map(r=>`<div class="row"><span class="t">${r[0]}</span><span>${r[1]}</span></div>`).join("")}</div>`;
+  const groups = [];
+  INTERVIEW.forEach(it=>{ let g=groups.find(x=>x.name===it.group); if(!g){ g={name:it.group,items:[]}; groups.push(g);} g.items.push(it); });
+  const body = groups.map(g=>`<p class="ivgroup">${g.name}</p>${g.items.map(ivCardHTML).join("")}`).join("");
+  return `<p class="eyebrow">Interview Day · 120 minutes</p>
+    <p class="lead">The Commission's <b>actual questions</b>, grouped as they'll ask them. Ten questions land in ~35 minutes — keep each answer near <b>3.5 minutes</b>. Determination is binary: <b>Ready / Not Ready</b>.</p>
+    ${agenda}
+    <div class="readbar"><div class="rl2">Team readiness — <b>${c.solid} of ${c.total}</b> marked solid</div>
+      <div class="track"><i style="width:${Math.round(frac*100)}%"></i></div></div>
+    ${body}`;
+}
+
 /* ================= Quiz ================= */
 const FLAME = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 10-12h-6l1-8Z"/></svg>`;
 
@@ -559,7 +700,8 @@ function shuffle(arr){
   return a;
 }
 function quizPool(){
-  let list = Q.map((item,idx)=>({item,idx}));
+  // Draw from the prep bank plus the interview questions that carry a quiz item.
+  let list = Q.concat(INTERVIEW.filter(x=>x.quiz)).map((item,idx)=>({item,idx}));
   if (quizState.scope==="mine") list = list.filter(o => seat && (o.item.owners.includes(seat) || o.item.core));
   else if (quizState.scope==="sections") list = list.filter(o => quizState.sections.includes(o.item.d));
   // Flatten: each question contributes its primary quiz plus any extra items in moreQuiz.
@@ -705,10 +847,11 @@ const screenEl = document.getElementById("screen");
 const tabbar = document.getElementById("tabbar");
 
 const TABS = [
-  { id:"prep",     label:"Prep",     icon:'<path d="M4 6h16M4 12h16M4 18h10"/>' },
-  { id:"seat",     label:"My Seat",  icon:'<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.4 3.1-5.5 7-5.5s7 2.1 7 5.5"/>' },
-  { id:"quiz",     label:"Quiz",     icon:'<path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/>' },
-  { id:"progress", label:"Progress", icon:'<path d="M5 20V10M12 20V4M19 20v-7"/>' }
+  { id:"prep",      label:"Prep",      icon:'<path d="M4 6h16M4 12h16M4 18h10"/>' },
+  { id:"seat",      label:"My Seat",   icon:'<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.4 3.1-5.5 7-5.5s7 2.1 7 5.5"/>' },
+  { id:"quiz",      label:"Quiz",      icon:'<path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/>' },
+  { id:"interview", label:"Interview", icon:'<path d="M4 5h16v11H9l-4 4V5Z"/>' },
+  { id:"progress",  label:"Progress",  icon:'<path d="M5 20V10M12 20V4M19 20v-7"/>' }
 ];
 
 function renderAppbar(){
@@ -718,7 +861,7 @@ function renderAppbar(){
     const t = state.quizScreen==="results" ? "Results" : "Quiz";
     appbar.innerHTML = `<button class="backbtn" data-act="quizback" aria-label="Back">‹</button><div class="atitle">${t}</div>`;
   } else {
-    const t = state.tab==="prep" ? "Board Prep" : state.tab==="seat" ? "My Seat" : state.tab==="quiz" ? "Quiz" : "My Progress";
+    const t = state.tab==="prep" ? "Board Prep" : state.tab==="seat" ? "My Seat" : state.tab==="quiz" ? "Quiz" : state.tab==="interview" ? "Interview Day" : "My Progress";
     appbar.innerHTML = `${EMBLEM}<div class="atitle">${t}</div>`;
   }
 }
@@ -733,6 +876,7 @@ function render(){
   if (state.tab==="prep") html = state.topic ? screenTopic(state.topic) : screenPrepList();
   else if (state.tab==="seat") html = screenSeat();
   else if (state.tab==="quiz") html = screenQuiz();
+  else if (state.tab==="interview") html = screenInterview();
   else html = screenProgress();
   screenInner.innerHTML = html;
   screenEl.scrollTop = 0;
@@ -809,7 +953,7 @@ screenEl.addEventListener("click",(e)=>{
     if (a==="gotomine"){ state.tab="prep"; state.scope="mine"; state.topic=null; render(); }
     else if (a==="changeseat"){ state.pickSeat=true; render(); }
     else if (a==="cancelpick"){ state.pickSeat=false; render(); }
-    else if (a==="reset"){ if(confirm("Clear every readiness mark for this device?")){ Q.forEach((_,i)=>store.del(rKey(i))); render(); } }
+    else if (a==="reset"){ if(confirm("Clear every readiness mark for this device?")){ Q.forEach((_,i)=>store.del(rKey(i))); INTERVIEW.forEach(it=>store.del(rKey(ivKey(it)))); render(); } }
     else if (a==="startquiz"){ if(!act.disabled){ startQuiz(); render(); } }
     else if (a==="qznext"){
       const s = quizState.session;
@@ -829,6 +973,11 @@ screenEl.addEventListener("click",(e)=>{
     card.querySelectorAll(".rate button").forEach(b=>b.classList.remove("on","ok"));
     if (next){ rateBtn.classList.add("on"); if(next==="solid") rateBtn.classList.add("ok"); }
     card.classList.toggle("solid", next==="solid");
+    if (state.tab==="interview"){
+      const c = ivCounts(), bar = screenInner.querySelector(".readbar");
+      if (bar){ bar.querySelector(".rl2").innerHTML = `Team readiness — <b>${c.solid} of ${c.total}</b> marked solid`;
+                bar.querySelector(".track i").style.width = Math.round((c.total?c.solid/c.total:0)*100)+"%"; }
+    }
     return;
   }
 
